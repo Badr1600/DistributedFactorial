@@ -15,11 +15,12 @@ import commons.NumberObject;
 /**
  * @author Ahmed Badr
  * 
- *         Title: NumberObject 
+ *         Title: Distributed Factorial Implementation 
  *         Date: 28.10.2018
  * 
- *         This Interface contains all the methods offered by the Distributed
- *         Factorial JAVA RMI Server to the participating Clients.
+ *         This class contains the implementation of the Distributed Factorial
+ *         JAVA RMI interfaces.
+ * 
  */
 public class DistributedFactImpl extends UnicastRemoteObject implements DistributedFact {
 
@@ -27,15 +28,32 @@ public class DistributedFactImpl extends UnicastRemoteObject implements Distribu
 
 	private static int CLINET_IDS = 0;
 
+	/*
+	 * HashMap<ClientID, TimeStamp> for keep tracking last time each client checked
+	 * in.
+	 */
 	private HashMap<Integer, Long> clientsConnecions;
+	/*
+	 * HashMap<ClientID, Boolean> for keep tracking of clients status
+	 * connected/disconnected
+	 */
 	private HashMap<Integer, Boolean> clientsAvailable;
 
+	/*
+	 * HashMap for tracking the number spaces assigned to each client.
+	 */
 	private ArrayList<RangeHelper> rangeBacketsHelper;
 
 	private NumberObject numToBeFactored;
 	private boolean jobFinished;
 	private Timer priodicClientConnectionTimer;
 
+	/**
+	 * Class Constructor.
+	 * 
+	 * @param numToBeFactored
+	 * @throws RemoteException
+	 */
 	public DistributedFactImpl(NumberObject numToBeFactored) throws RemoteException {
 		super();
 		this.numToBeFactored = numToBeFactored;
@@ -147,12 +165,29 @@ public class DistributedFactImpl extends UnicastRemoteObject implements Distribu
 		return numToBeFactored;
 	}
 
+	/**
+	 * @author Ahmed Badr
+	 * 
+	 *         Title: RangeHelper 
+	 *         Date: 28.10.2018
+	 * 
+	 *         Private Helper Class for handling the ranges of the number space sent
+	 *         to the clients.
+	 * 
+	 */
 	private class RangeHelper {
 		private int clientID;
-		private boolean assigned;
-		private boolean rangeComplete;
-		private BigInteger[] range;
+		private boolean assigned; // to check if the range is assigned to any client yet.
+		private boolean rangeComplete; // to check if the range is completed in search by the client.
+		private BigInteger[] range; // subset of the number space
 
+		/**
+		 * Class Constructor.
+		 * 
+		 * @param clientID
+		 * @param status
+		 * @param range
+		 */
 		public RangeHelper(int clientID, boolean status, BigInteger[] range) {
 			this.clientID = clientID;
 			this.assigned = status;
