@@ -64,6 +64,13 @@ public class DistributedFactImpl extends UnicastRemoteObject implements Distribu
 		this.priodicClientConnectionTimer = new Timer();
 		rangeBacketsHelper.add(new RangeHelper(0, false, numToBeFactored.getNextRange()));
 
+		/*
+		 * Periodic timer to keep track of the online connected clients to the server
+		 * and keep track of the subset ranges sent to the clients.
+		 * 
+		 * And also reduce memory usage by removing the used subset ranges (with out
+		 * finding factors within)
+		 */
 		priodicClientConnectionTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
