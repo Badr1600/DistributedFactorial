@@ -6,8 +6,7 @@ import java.math.BigInteger;
 /**
  * @author Ahmed Badr
  * 
- *         Title: NumberObject 
- *         Date: 28.10.2018
+ *         Title: NumberObject Date: 28.10.2018
  * 
  *         This class represents the target number to find its factors.
  */
@@ -19,7 +18,8 @@ public class NumberObject implements Serializable {
 	private boolean twoEleminated; // Helper to identify the number is multiple of 2
 	private boolean threeEleminated; // Helper to identify the number is multiple of 3
 	private boolean fiveEleminated; // Helper to identify the number is multiple of 5
-	private int rangeIndex; // Index to track the number space sent to each user
+	private BigInteger rangeIndex; // Index to track the number space sent to each user
+	private BigInteger rangeSize; // Range packet size, subset of the number space
 
 	/**
 	 * Class Constructor.
@@ -31,8 +31,9 @@ public class NumberObject implements Serializable {
 		this.twoEleminated = false;
 		this.threeEleminated = false;
 		this.fiveEleminated = false;
-		this.rangeIndex = 1;
+		this.rangeIndex = BigInteger.ONE;
 		eliminateMultiples235(number);
+		setRangeSize(calculateRangeBackets());
 	}
 
 	/**
@@ -81,16 +82,16 @@ public class NumberObject implements Serializable {
 	 * 
 	 */
 	public synchronized BigInteger[] getNextRange() {
-		BigInteger backetSize = getTargetNumber().divide(calculateRangeBackets());
+		BigInteger backetSize = getRangeSize();
 		BigInteger[] range = new BigInteger[2];
-		if (rangeIndex == 1) {
+		if (rangeIndex.equals(BigInteger.ONE)) {
 			range[0] = new BigInteger("2");
 			range[1] = backetSize;
-			rangeIndex++;
+			rangeIndex = rangeIndex.add(BigInteger.ONE);
 		} else {
-			range[0] = backetSize.multiply(new BigInteger("" + rangeIndex));
-			rangeIndex++;
-			range[1] = backetSize.multiply(new BigInteger("" + rangeIndex));
+			range[0] = backetSize.multiply(rangeIndex);
+			rangeIndex = rangeIndex.add(BigInteger.ONE);
+			range[1] = backetSize.multiply(rangeIndex);
 		}
 		return range;
 	}
@@ -101,10 +102,10 @@ public class NumberObject implements Serializable {
 	 * 
 	 * @return BigInteger
 	 */
-	public BigInteger calculateRangeBackets() {
+	private BigInteger calculateRangeBackets() {
 		BigInteger factor = getTargetNumber()
 				.divide(new BigInteger("" + (getTargetNumber().toString().length())).pow(10));
-		return (getTargetNumber().divide(factor));
+		return (factor);
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -112,6 +113,20 @@ public class NumberObject implements Serializable {
 	// Basic GETTERs and SETTERs
 	//
 	////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * @return the rangeSize
+	 */
+	public BigInteger getRangeSize() {
+		return rangeSize;
+	}
+
+	/**
+	 * @param rangeSize the rangeSize to set
+	 */
+	public void setRangeSize(BigInteger rangeSize) {
+		this.rangeSize = rangeSize;
+	}
 
 	/**
 	 * @return the targetNumber
@@ -160,5 +175,12 @@ public class NumberObject implements Serializable {
 	 */
 	public void setFiveEleminated(boolean fiveEleminated) {
 		this.fiveEleminated = fiveEleminated;
+	}
+
+	/**
+	 * @return the rangeIndex
+	 */
+	public BigInteger getRangeIndex() {
+		return rangeIndex;
 	}
 }

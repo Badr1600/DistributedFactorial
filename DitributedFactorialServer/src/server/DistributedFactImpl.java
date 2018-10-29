@@ -15,8 +15,7 @@ import commons.NumberObject;
 /**
  * @author Ahmed Badr
  * 
- *         Title: Distributed Factorial Implementation 
- *         Date: 28.10.2018
+ *         Title: Distributed Factorial Implementation Date: 28.10.2018
  * 
  *         This class contains the implementation of the Distributed Factorial
  *         JAVA RMI interfaces.
@@ -27,6 +26,8 @@ public class DistributedFactImpl extends UnicastRemoteObject implements Distribu
 	private static final long serialVersionUID = -4408845922252630444L;
 
 	private static int CLINET_IDS = 0;
+
+	private static Long startTime = System.nanoTime();
 
 	/*
 	 * HashMap<ClientID, TimeStamp> for keep tracking last time each client checked
@@ -81,7 +82,8 @@ public class DistributedFactImpl extends UnicastRemoteObject implements Distribu
 					Long clientLastCheckIn = clientsConnecions.get((int) keyObjects[i]);
 					Long timeElapsedLastCheck = (currecntTime - clientLastCheckIn) / 1000000; // time in millisecond
 					if (timeElapsedLastCheck > 5000) {
-						System.out.println("Client:" + (int) keyObjects[i] + " Disconnected!");
+						System.out.println("Client: " + (int) keyObjects[i] + " Disconnected!");
+						System.out.println("Number of Connected Clients: " + keyObjects.length);
 						clientsAvailable.remove((int) keyObjects[i]);
 						clientsConnecions.remove((int) keyObjects[i]);
 						for (int j = 0; j < rangeBacketsHelper.size(); j++) {
@@ -119,6 +121,8 @@ public class DistributedFactImpl extends UnicastRemoteObject implements Distribu
 		}
 		jobFinished = true;
 		priodicClientConnectionTimer.cancel();
+		Long endTime = System.nanoTime();
+		System.out.println("Total Time Elabsed by all clients: " + (endTime - startTime) / 1000000000 + " sec");
 	}
 
 	@Override
@@ -175,8 +179,7 @@ public class DistributedFactImpl extends UnicastRemoteObject implements Distribu
 	/**
 	 * @author Ahmed Badr
 	 * 
-	 *         Title: RangeHelper 
-	 *         Date: 28.10.2018
+	 *         Title: RangeHelper Date: 28.10.2018
 	 * 
 	 *         Private Helper Class for handling the ranges of the number space sent
 	 *         to the clients.

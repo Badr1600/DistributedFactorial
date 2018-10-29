@@ -13,8 +13,7 @@ import commons.NumberObject;
 /**
  * @author Ahmed Badr
  * 
- *         Title: Distributed Factorial JAVA RMI Client. 
- *         Date: 28.10.2018
+ *         Title: Distributed Factorial JAVA RMI Client. Date: 28.10.2018
  * 
  *         This Interface contains the logic of the clients connecting to the
  *         JAVA RMI server starting by requesting unique ID from the server then
@@ -26,6 +25,7 @@ public class DistributedFactClient {
 
 	private static int clientID;
 	private static Long startTime = System.nanoTime(); // Client Job Start time stamp.
+	private static int numberOfUsedRanges;
 
 	/**
 	 * Main Method.
@@ -34,6 +34,7 @@ public class DistributedFactClient {
 	 */
 	public static void main(String[] args) {
 		System.out.print("Client Connected!");
+		numberOfUsedRanges = 0;
 		try {
 
 			DistributedFact factRMIClient = (DistributedFact) Naming.lookup(DistributedFact.SERVICENAME);
@@ -71,6 +72,7 @@ public class DistributedFactClient {
 			 * the search routine.
 			 */
 			while (factRMIClient.checkConnection(clientID)) {
+				numberOfUsedRanges++;
 				ArrayList<String> result = findFactors(factRMIClient.askForRange(clientID), numToBeFactored);
 				if (result.get(1).equals("Number Not Found")) {
 					factRMIClient.factorialNotFound(clientID);
@@ -79,7 +81,9 @@ public class DistributedFactClient {
 					result.add("Time Elabsed: " + (endTime - startTime) / 1000000000 + " sec");
 					factRMIClient.submitAnswer(result);
 					System.out.println(result.toString());
+					System.out.println("Number of used Packets: " + numberOfUsedRanges);
 					System.out.println("Time Elabsed: " + (endTime - startTime) / 1000000000 + " sec");
+
 					break;
 				}
 			}
