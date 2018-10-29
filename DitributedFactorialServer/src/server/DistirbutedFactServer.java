@@ -11,8 +11,7 @@ import commons.NumberObject;
 /**
  * @author Ahmed Badr
  * 
- *         Title: Distributed Factorial Server 
- *         Date: 28.10.2018
+ *         Title: Distributed Factorial Server Date: 28.10.2018
  * 
  *         This class represents the Distributed Factorial JAVA RMI Server.
  */
@@ -49,6 +48,7 @@ public class DistirbutedFactServer extends UnicastRemoteObject {
 
 				System.out.println("Published in RMI registery, ready...");
 				System.out.println("Number to be Factored is: " + numTobeFactored.getTargetNumber().toString());
+				System.out.println("Range Packet Size = " + numTobeFactored.getRangeSize());
 				System.out.println("Clients Can be Connected to the Server.");
 
 				inputFromUser.close();
