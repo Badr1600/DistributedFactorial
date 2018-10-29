@@ -84,6 +84,8 @@ public class DistributedFactImpl extends UnicastRemoteObject implements Distribu
 					if (timeElapsedLastCheck > 5000) {
 						System.out.println("Client: " + (int) keyObjects[i] + " Disconnected!");
 						System.out.println("Number of Connected Clients: " + (keyObjects.length - 1));
+						System.out.println("Number of Connected Clients: " + keyObjects.length);
+
 						clientsAvailable.remove((int) keyObjects[i]);
 						clientsConnecions.remove((int) keyObjects[i]);
 						for (int j = 0; j < rangeBacketsHelper.size(); j++) {
