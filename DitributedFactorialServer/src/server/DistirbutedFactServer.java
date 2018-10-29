@@ -27,6 +27,7 @@ public class DistirbutedFactServer extends UnicastRemoteObject {
 	public static void main(String[] args) {
 		System.setSecurityManager(new SecurityManager());
 		try {
+			System.out.println("Please Enter the number to be factored!");
 			Scanner inputFromUser = new Scanner(System.in); // Get input from the user "Target Number to be Factored"
 			BigInteger number = new BigInteger(inputFromUser.nextLine());
 
@@ -51,6 +52,7 @@ public class DistirbutedFactServer extends UnicastRemoteObject {
 				System.out.println("Clients Can be Connected to the Server.");
 
 				inputFromUser.close();
+
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
